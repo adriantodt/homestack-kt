@@ -5,19 +5,23 @@ import net.adriantodt.homestack.dsl.traefik.http.TraefikHttp
 import net.adriantodt.homestack.dsl.traefik.tcp.TraefikTcp
 import net.adriantodt.homestack.dsl.traefik.udp.TraefikUdp
 
-class TraefikConfiguration(val parent: CompositionService) {
+class TraefikConfiguration(override val composeService: CompositionService) : CompositionServiceAccess {
     val http by lazy { TraefikHttp(this) }
     val tcp by lazy { TraefikTcp(this) }
     val udp by lazy { TraefikUdp(this) }
 
     var enabled: Boolean? = null
         set(value) {
-            field = value?.also { parent.label("traefik.enable" to value.toString()) }
+            field = value?.also {
+                composeService.label("traefik.enable" to value.toString())
+            }
         }
 
     var dockerNetwork: String? = null
         set(value) {
-            field = value?.also { parent.label("traefik.docker.network" to value) }
+            field = value?.also {
+                composeService.label("traefik.docker.network" to value)
+            }
         }
 
     init {

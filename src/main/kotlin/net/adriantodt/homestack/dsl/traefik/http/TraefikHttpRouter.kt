@@ -10,7 +10,7 @@ open class TraefikHttpRouter(parent: TraefikHttp, name: String): TraefikTcpRoute
     var rule: TraefikRule? = null
         set(value) {
             if (value != null) {
-                parent.parent.parent.label("traefik.$protocol.routers.$name.rule" to value.toString())
+                composeService.label("traefik.$protocol.routers.$name.rule" to value.toString())
             }
             field = value
         }

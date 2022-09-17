@@ -8,8 +8,8 @@ open class TraefikHttpLoadBalancerService(parent: TraefikHttpService) : TraefikT
     var passHostHeader: Boolean? = null
         set(value) {
             if (value != null) {
-                parent.parent.parent.parent.label(
-                    "traefik.$protocol.services.${parent.name}.loadbalancer.passhostheader" to value.toString()
+                composeService.label(
+                    "traefik.$protocol.services.$name.loadbalancer.passhostheader" to value.toString()
                 )
             }
             field = value

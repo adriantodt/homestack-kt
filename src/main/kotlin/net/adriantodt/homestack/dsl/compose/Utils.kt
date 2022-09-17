@@ -9,7 +9,7 @@ fun stack(name: String, block: CompositionStack.() -> Unit): CompositionStack {
 }
 
 @ComposeDsl
-fun CompositionStack.externalNetwork(name: String, block: CompositionNetwork.() -> Unit): CompositionNetwork {
+fun CompositionStack.externalNetwork(name: String = "default", block: CompositionNetwork.() -> Unit): CompositionNetwork {
     return network(name) {
         external = true
         block()
@@ -17,7 +17,7 @@ fun CompositionStack.externalNetwork(name: String, block: CompositionNetwork.() 
 }
 
 @ComposeDsl
-fun CompositionStack.externalNetwork(name: String, network: DockerNetwork): CompositionNetwork {
+fun CompositionStack.externalNetwork(name: String = "default", network: DockerNetwork): CompositionNetwork {
     return network(name) {
         external = true
         dockerName = network.name
@@ -42,5 +42,5 @@ fun CompositionService.enableDockerAccess(volumeAccess: Boolean) {
 }
 
 operator fun CompositionStack.unaryPlus() {
-    File("stack_$name.yml").writeText(toString())
+    File("stacks/$name.yml").writeText(toString())
 }

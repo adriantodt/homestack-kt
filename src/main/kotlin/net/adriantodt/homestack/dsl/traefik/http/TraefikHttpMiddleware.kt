@@ -7,4 +7,8 @@ open class TraefikHttpMiddleware(parent: TraefikHttp, name: String) : TraefikTcp
 
     val headers: TraefikHttpHeadersMiddleware
         get() = TraefikHttpHeadersMiddleware(this)
+
+    fun headers(block: TraefikHttpHeadersMiddleware.() -> Unit): TraefikHttpHeadersMiddleware {
+        return headers.also(block)
+    }
 }

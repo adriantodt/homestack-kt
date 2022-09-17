@@ -4,11 +4,19 @@ class CompositionService(private val parent: CompositionStack, val name: String)
 
     var image: String? = null
     var restart: RestartBehavior? = null
+    var command: String? = null
+        set(value) {
+            if (value != null) {
+                commandParts.clear()
+            }
+            field = value
+        }
     private val volumes = mutableListOf<String>()
     private val environment = mutableListOf<String>()
     private val ports = mutableListOf<String>()
     private val labels = mutableListOf<String>()
     private val networks = mutableListOf<String>()
+    private val commandParts = mutableListOf<String>()
 
     fun volumes(vararg values: Pair<String, String>) {
         this.volumes += values.map { (from, to) -> "$from:$to" }
@@ -30,11 +38,24 @@ class CompositionService(private val parent: CompositionStack, val name: String)
         this.networks += values
     }
 
+    fun command(vararg values: String) {
+        this.command = null
+        this.commandParts += values
+    }
+
 
     override fun toString() = buildString {
         appendLine("$name:")
         image?.let {
             appendLine("  image: $it")
+        }
+        if (commandParts.isNotEmpty()) {
+            appendLine("  command:")
+            for (commandPart in commandParts) {
+                appendLine("    - \"${commandPart.replace("\"", "\\\"")}\"")
+            }
+        } else command?.let {
+            appendLine("  command: $it")
         }
         if (volumes.isNotEmpty()) {
             appendLine("  volumes:")
